@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public Response addUser(String name, String userName, String phoneNumber) {
+        if(UserWithUserNameExists(userName)) {
+            return new Response(401, "User with this user-name already exists! Please try another user-name.", null);
+        }
         User user = new User();
         user.setName(name);
         user.setUserName(userName);
@@ -31,6 +35,24 @@ public class UserServiceImpl implements UserService {
         user.setUpdatedAt(new Date());
         usersRepository.save(user);
         return new Response(200, "New User Created", null);
+    }
+
+    @Override
+    public Response getUsers() {
+        List<User> userList = usersRepository.getUsers();
+
+        return new Response(200, "Here are the users", userList);
+    }
+
+    @Override
+    public Response DeleteUser(String userName) {
+        User deletedUser = usersRepository.getUserByUserName(userName);
+        usersRepository.deleteAllByUserName(userName);
+        return new Response(200, "Users Deleted successfully", deletedUser);
+    }
+    private boolean UserWithUserNameExists(String userName) {
+        if(usersRepository.UserWithUserNameExists(userName) > 0) return true;
+        return false;
     }
     private UsersDto mapToDTO(User user){
         UsersDto usersDto = mapper.map(user, UsersDto.class);

@@ -22,4 +22,14 @@ public class UserController {
                                             @RequestParam(value="phoneNumber") String phoneNumber) {
         return new ResponseEntity<>(userService.addUser(name, userName, phoneNumber), HttpStatus.CREATED);
     }
+
+    @GetMapping("getUsers/")
+    public ResponseEntity<Response> getUsers() {
+        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("deleteUser/")
+    public ResponseEntity<Response> deleteUser(@RequestParam(value = "user_name") String user_name) {
+        return new ResponseEntity<>(userService.DeleteUser(user_name), HttpStatus.OK);
+    }
 }
