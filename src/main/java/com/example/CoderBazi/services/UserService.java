@@ -1,7 +1,10 @@
 package com.example.CoderBazi.services;
+import com.example.CoderBazi.payload.Response;
 import org.springframework.stereotype.Service;
 
-@Service
-public interface UserService {
+import java.util.Date;
 
+
+public interface UserService {
+    Response addUser(String name, String userName, String phoneNumber);
 }
