@@ -7,4 +7,6 @@ import java.util.Date;
 
 public interface UserService {
     Response addUser(String name, String userName, String phoneNumber);
+    Response getUsers();
+    Response DeleteUser(String userName);
 }
