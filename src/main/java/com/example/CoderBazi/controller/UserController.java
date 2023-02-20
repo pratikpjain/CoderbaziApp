@@ -1,5 +1,6 @@
 package com.example.CoderBazi.controller;
 
+import com.example.CoderBazi.entities.User;
 import com.example.CoderBazi.payload.Response;
 import com.example.CoderBazi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,8 @@ public class UserController {
         this.userService = userService;
     }
     @PostMapping("addUser/")
-    public ResponseEntity<Response> addUser(@RequestParam(value="name") String name,
-                                            @RequestParam(value="userName") String userName,
-                                            @RequestParam(value="phoneNumber") String phoneNumber) {
-        return new ResponseEntity<>(userService.addUser(name, userName, phoneNumber), HttpStatus.CREATED);
+    public ResponseEntity<Response> addUser(@RequestBody User user) {
+        return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
     }
 
     @GetMapping("getUsers/")
