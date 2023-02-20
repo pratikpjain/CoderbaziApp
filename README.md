@@ -1,6 +1,7 @@
 # <span style = "color: wheat">CoderbaziApp</span> 🚀🚀
 > An application where we will writing a lot of APIs and creating some fun stuffs!
 
+**Want to Contribute and make your hands dirty💻?**<br>
 Follow this steps:
 1) <span style = "color: Cyan">Clone the repository</span>
     - Open your <span style = "color: green">IDE</span> and run this command in <span style = "color: violet">Terminal</span> <br> 
