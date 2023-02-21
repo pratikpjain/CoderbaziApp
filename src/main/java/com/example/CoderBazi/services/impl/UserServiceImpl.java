@@ -23,18 +23,14 @@ public class UserServiceImpl implements UserService {
         this.mapper = mapper;
     }
     @Override
-    public Response addUser(String name, String userName, String phoneNumber) {
-        String ValidationResponse = ValidateUser(name, userName, phoneNumber);
+    public Response addUser(User user) {
+        String ValidationResponse = ValidateUser(user.getName(), user.getUserName(), user.getPhoneNumber());
         if(ValidationResponse != null) {
             return new Response(401, ValidationResponse, null);
         }
-        if(UserWithUserNameExists(userName)) {
+        if(UserWithUserNameExists(user.getUserName())) {
             return new Response(401, "User with this user-name already exists! Please try another user-name.", null);
         }
-        User user = new User();
-        user.setName(name);
-        user.setUserName(userName);
-        user.setPhoneNumber(phoneNumber);
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
         usersRepository.save(user);
@@ -67,11 +63,12 @@ public class UserServiceImpl implements UserService {
     }
 
     String ValidateName(String name) {
-        if(name == "") return "Name field cannot be empty";
+        if(name == null) return "Name field cannot be empty";
         if(name.length() >= 100) return "Name must not exceed 100 characters";
         return null;
     }
     String ValidateUserName(String userName) {
+        if(userName == null) return "user name field can't be empty";
         if(userName.length() < 3 || userName.length() > 20) return "user-name length must be between 3 to 20.";
         for(int i = 0 ; i < userName.length() ; ++i) {
             char c = userName.charAt(i);
@@ -80,6 +77,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
     String ValidatePhoneNumber(String phoneNumber) {
+        if(phoneNumber == null) return "phone number field can't be empty";
         if(phoneNumber.length() != 10) return "phone-number must be of length 10";
         for(int i = 0 ; i < 10 ; ++i) {
             char c = phoneNumber.charAt(i);
