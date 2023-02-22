@@ -7,6 +7,9 @@ Follow this steps:
 1) <span style = "color: Cyan">Clone the repository</span>
     - Open your <span style = "color: green">IDE</span> and run this command in <span style = "color: violet">Terminal</span> <br> 
     `git clone https://github.com/pratikpjain/CoderbaziApp.git`
+    - You can open it at <a href = "http://localhost:8080">`http://localhost:8080/`</a>
+    - Make sure your mysql database is running at port `3306`.
+    
 2) <span style = "color: Cyan">To run the application</span>
     - Go to `com.example.CoderBazi.CoderBaziApplication` and run this Java file.
 3) <span style = "color: Cyan">To add any new feature or any changes</span>
