@@ -23,7 +23,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Response AddQuestion(String userName, MultipartFile file) throws IOException {
-        System.out.println(file.getContentType());
         if(!ValidateFileType(file)) {
             return new Response(401, "Please upload pdf file only. We do not support other extensions.", null);
         }

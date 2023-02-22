@@ -13,4 +13,8 @@ public class BaseController {
     public ResponseEntity HealthCheck() {
         return new ResponseEntity<>("Hi, this is health check api, your app is running, Thanks!", HttpStatus.OK);
     }
+    @GetMapping("/")
+    public ResponseEntity DefaultAPI() {
+        return new ResponseEntity<>("Hi, this is the default route", HttpStatus.OK);
+    }
 }

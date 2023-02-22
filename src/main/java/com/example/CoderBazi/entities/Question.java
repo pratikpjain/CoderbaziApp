@@ -14,6 +14,7 @@ public class Question {
     @Column(name="question_id")
     private int questionId;
     private String userName;
+    private int isVerified;
     @Lob
     private byte[] file;
 }
