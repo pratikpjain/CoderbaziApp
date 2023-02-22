@@ -17,4 +17,5 @@ public class BaseController {
     public ResponseEntity DefaultAPI() {
         return new ResponseEntity<>("Hi, this is the default route", HttpStatus.OK);
     }
+
 }
