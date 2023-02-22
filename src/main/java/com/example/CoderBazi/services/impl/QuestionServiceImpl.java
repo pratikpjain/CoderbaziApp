@@ -23,6 +23,10 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Response AddQuestion(String userName, MultipartFile file) throws IOException {
+        System.out.println(file.getContentType());
+        if(!ValidateFileType(file)) {
+            return new Response(401, "Please upload pdf file only. We do not support other extensions.", null);
+        }
         Question question = new Question();
         question.setUserName(userName);
         question.setFile(file.getBytes());
@@ -34,8 +38,11 @@ public class QuestionServiceImpl implements QuestionService {
         Question question = questionRepository.findById(questionId).get();
         return question;
     }
-    boolean ValidateFileType(MultipartFile file) {
-        return file.getContentType().equals(ContentType.PDF);
+    @Override
+    public Response DeleteQuestion(int questionId) {
+        questionRepository.deleteAllByQuestionId(questionId);
+        return new Response(200, "Question is Deleted Successfully", null);
     }
+    boolean ValidateFileType(MultipartFile file) {return file.getContentType().equals(ContentType.PDF.getMimeType());}
 
 }

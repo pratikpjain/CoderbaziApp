@@ -9,4 +9,5 @@ import java.io.IOException;
 public interface QuestionService {
     public Response AddQuestion(String userName, MultipartFile file) throws IOException;
     public Question GetQuestion(int questionId);
+    public Response DeleteQuestion(int questionId);
 }
