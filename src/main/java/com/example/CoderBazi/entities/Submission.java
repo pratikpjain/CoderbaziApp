@@ -1,6 +1,5 @@
 package com.example.CoderBazi.entities;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,15 +9,16 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name="questions")
-public class Question {
+@Table(name = "submissions")
+public class Submission {
     @Id
-    @Column(name="question_id")
+    @Column(name = "submission_id")
+    private int submissionId;
     private int questionId;
     private String userName;
-    private int isVerified;
+    private String verdict;
     @Lob
-    private byte[] file;
+    private byte[] submissionFile;
     private Date createdAt;
     private Date updatedAt;
 }

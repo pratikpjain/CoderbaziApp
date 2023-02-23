@@ -33,15 +33,19 @@ public class QuestionController {
     }
     @GetMapping("getQuestion/")
     public ResponseEntity<Resource> GetQuestion(@RequestParam(value = "question-id") int questionId) {
-        Question question = questionService.GetQuestion(questionId);
-        String fileName = "problem/"+questionId+".pdf";
-        ByteArrayInputStream byteArrayOutputStream;
-        byteArrayOutputStream = new ByteArrayInputStream(question.getFile());
-        InputStreamResource fileInputStream = new InputStreamResource(byteArrayOutputStream);
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
-        headers.set(HttpHeaders.CONTENT_TYPE, ContentType.PDF.getMimeType());
-        return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
+        try {
+            Question question = questionService.GetQuestion(questionId);
+            String fileName = "problem/" + questionId + ".pdf";
+            ByteArrayInputStream byteArrayOutputStream;
+            byteArrayOutputStream = new ByteArrayInputStream(question.getFile());
+            InputStreamResource fileInputStream = new InputStreamResource(byteArrayOutputStream);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+            headers.set(HttpHeaders.CONTENT_TYPE, ContentType.PDF.getMimeType());
+            return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+        }
     }
     @DeleteMapping("deleteQuestion/")
     public ResponseEntity<Response> DeleteQuestion(@RequestParam(value = "question-id") int questionId) {

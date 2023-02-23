@@ -19,7 +19,7 @@ public class TestCaseServiceImpl implements TestCaseService {
     }
 
     @Override
-    public Response AddTestCase(int questionId, MultipartFile testFile) throws IOException {
+    public Response AddTestCase(String userName, int questionId, MultipartFile testFile) throws IOException {
         if(!ValidateTestFileType(testFile)) {
             return new Response(401, "We only support Text(.txt) files for test cases. Please upload only text files!", null);
         }
@@ -30,8 +30,8 @@ public class TestCaseServiceImpl implements TestCaseService {
         TestCase testCase = new TestCase();
         testCase.setQuestionId(questionId);
         testCase.setTestFile(testFile.getBytes());
+        testCase.setUserName(userName);
         testCaseRepository.save(testCase);
-        testCaseRepository.verifyQuestion(questionId);
         return new Response(201, "Test file is uploaded to the database!", null);
     }
 
