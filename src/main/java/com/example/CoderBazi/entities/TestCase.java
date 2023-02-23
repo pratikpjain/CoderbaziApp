@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @Entity
@@ -13,5 +15,8 @@ public class TestCase {
     private int testCaseId;
     @Lob
     private byte[] testFile;
+    private String userName;
     private int questionId;
+    private Date createdAt;
+    private Date updatedAt;
 }
