@@ -1,4 +1,4 @@
-# <span style = "color: wheat">CoderbaziApp</span> 🚀🚀
+# <span style = "color: wheat">CoderbaziApp</span> 🚀🚀🚀
 > An application where we will writing a lot of APIs and creating some fun stuffs!
 
 <h4>Tech-Stack: Java Spring boot, Mysql, Rest API</h4>
