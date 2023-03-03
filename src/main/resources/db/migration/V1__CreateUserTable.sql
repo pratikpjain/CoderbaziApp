@@ -1,5 +1,4 @@
 drop table if exists users cascade;
-drop sequence if exists hibernate_sequence;
 create sequence hibernate_sequence start 1 increment 1;
 
 create table users (
