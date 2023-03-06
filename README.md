@@ -39,7 +39,4 @@ Follow this steps:
    - <b>Note</b>: Not following this conventions may lead to error in migratons
    
 
-Current We are hosting this website on `Railway.app` platform for the trial and testing purpose.
-URL ```sh
-    https://coderbaziapp-production.up.railway.app/
-   ```
+Currently we are deplying the changes on `Railway.app` platform for the trial and testing purpose: https://coderbaziapp-production.up.railway.app/
