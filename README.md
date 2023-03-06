@@ -37,3 +37,9 @@ Follow this steps:
    - For example we are adding a new column to table `Users` and let this is the `3rd` Migration, then name should be `V3__AddNewColumnToUsers.sql`
    - For running the migration, you can do Maven Install on IDE or simply run the app it would make the migrations.
    - <b>Note</b>: Not following this conventions may lead to error in migratons
+   
+
+Current We are hosting this website on `Railway.app` platform for the trial and testing purpose.
+URL ```sh
+    https://coderbaziapp-production.up.railway.app/
+   ```
