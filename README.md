@@ -29,7 +29,7 @@ Follow this steps:
     - Raise a PR(Pull Request)
     - Get review done from one of our contributers
     - Then merge it to main!
-    - ☠<b>Note</b>: Please don't directly push any code to Main branch without reviewing it.
+    - ☠<b>Note</b>: Please don't directly push any code to `main` branch without reviewing it as we are using `main` branch for deployment.
 
 4) <span style = "color: Cyan">Database Migration</span>
    - Go to `src\main\resources\db\migration`
