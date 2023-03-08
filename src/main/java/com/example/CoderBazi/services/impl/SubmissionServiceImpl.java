@@ -8,12 +8,15 @@ import com.example.CoderBazi.services.SubmissionService;
 import com.example.CoderBazi.utils.AppConstants;
 import com.j256.simplemagic.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SubmissionServiceImpl implements SubmissionService {
@@ -45,9 +48,30 @@ public class SubmissionServiceImpl implements SubmissionService {
             submissionRepository.save(submission);
             int submissionId = submissionRepository.getSubmissionIdByQuestionIdUserName(questionId, userName);
             SubmissionResponse submissionResponse = new SubmissionResponse(submissionId, questionId, userName, verdict, createAt, updateAt);
-            return new Response(201, "Submission is Successful", submissionResponse);
+            return new Response(HttpStatus.CREATED.value(), "Submission is Successful", submissionResponse);
         } catch (Exception e) {
-            return new Response(400, e.getMessage(), null);
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+        }
+    }
+
+    @Override
+    public Response GetSubmissionsByUserId(String userName) {
+        try {
+            List<Submission> submissionList = submissionRepository.getSubmissionsByUserId(userName);
+            List<SubmissionResponse> submissionResponseList = new ArrayList<>();
+            for(Submission submission: submissionList) {
+                SubmissionResponse submissionResponse = new SubmissionResponse();
+                submissionResponse.setSubmissionId(submission.getSubmissionId());
+                submissionResponse.setUserName(submission.getUserName());
+                submissionResponse.setVerdict(submission.getVerdict());
+                submissionResponse.setQuestionId(submission.getQuestionId());
+                submissionResponse.setCreatedAt(submission.getCreatedAt());
+                submissionResponse.setUpdatedAt(submission.getUpdatedAt());
+                submissionResponseList.add(submissionResponse);
+            }
+            return new Response(HttpStatus.OK.value(), "Submissions Details", submissionResponseList);
+        } catch (Exception e) {
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
         }
     }
 

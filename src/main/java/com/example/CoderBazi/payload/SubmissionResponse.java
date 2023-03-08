@@ -16,4 +16,7 @@ public class SubmissionResponse {
     private String verdict;
     private Date createdAt;
     private Date updatedAt;
+    public SubmissionResponse() {
+
+    }
 }
