@@ -5,10 +5,7 @@ import com.example.CoderBazi.services.SubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -28,7 +25,16 @@ public class SubmissionController {
         try {
             return new ResponseEntity<>(submissionService.AddSubmission(userName, questionId, submissionFile), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(new Response(401, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("getSubmissionsByUserName/")
+    public ResponseEntity<Response> GetSubmissionsByUserName(@RequestParam(value = "user-name") String user_name) {
+        try {
+            return new ResponseEntity<>(submissionService.GetSubmissionsByUserId(user_name), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
