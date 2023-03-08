@@ -17,4 +17,9 @@ public class BaseController {
     public ResponseEntity DefaultAPI() {
         return new ResponseEntity<>("Hi, this is the default route", HttpStatus.OK);
     }
+
+    @GetMapping("/error")
+    public ResponseEntity ErrorMapping() {
+        return new ResponseEntity<>("404\nPage Not Found\nPlease Try Valid Endpoints", HttpStatus.NOT_FOUND);
+    }
 }
