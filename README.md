@@ -39,4 +39,4 @@ Follow this steps:
    - <b>Note</b>: Not following this conventions may lead to error in migratons
    
 
-Currently we are deplying the changes on `Railway.app` platform for the trial and testing purpose: https://coderbaziapp-production.up.railway.app/
+Currently we are deploying the changes on `Railway.app` platform for the trial and testing purpose: https://coderbaziapp-production.up.railway.app/
