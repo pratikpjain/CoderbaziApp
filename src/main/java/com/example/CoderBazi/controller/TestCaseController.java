@@ -30,9 +30,10 @@ public class TestCaseController {
                                                 @RequestParam(value = "question-id") int questionId,
                                                 @RequestParam(value = "test-file") MultipartFile testFile) {
         try {
-            return new ResponseEntity<>(testCaseService.AddTestCase(userName, questionId, testFile), HttpStatus.CREATED);
+            Response response = testCaseService.AddTestCase(userName, questionId, testFile);
+            return new ResponseEntity<>(response, response.getStatus());
         } catch(Exception e) {
-            return new ResponseEntity<>(new Response(401, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -40,6 +41,9 @@ public class TestCaseController {
     public ResponseEntity<Resource> GetTestCase(@RequestParam(value = "question-id") int questionId) {
         try {
             TestCase testCase = testCaseService.GetTestCase(questionId);
+            if(testCase == null) {
+                return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             String fileName = "test_case_file_for_problem/" + questionId + ".txt";
             ByteArrayInputStream byteArrayOutputStream;
             byteArrayOutputStream = new ByteArrayInputStream(testCase.getTestFile());
@@ -49,7 +53,7 @@ public class TestCaseController {
             headers.set(HttpHeaders.CONTENT_TYPE, ContentType.TEXT.getMimeType());
             return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
