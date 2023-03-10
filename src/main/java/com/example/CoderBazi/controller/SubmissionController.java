@@ -23,18 +23,20 @@ public class SubmissionController {
                                                   @RequestParam(value = "question-id") int questionId,
                                                   @RequestParam(value = "file") MultipartFile submissionFile) {
         try {
-            return new ResponseEntity<>(submissionService.AddSubmission(userName, questionId, submissionFile), HttpStatus.CREATED);
+            Response response = submissionService.AddSubmission(userName, questionId, submissionFile);
+            return new ResponseEntity<>(response, response.getStatus());
         } catch (Exception e) {
-            return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("getSubmissionsByUserName/")
     public ResponseEntity<Response> GetSubmissionsByUserName(@RequestParam(value = "user-name") String user_name) {
         try {
-            return new ResponseEntity<>(submissionService.GetSubmissionsByUserId(user_name), HttpStatus.OK);
+            Response response = submissionService.GetSubmissionsByUserId(user_name);
+            return new ResponseEntity<>(response, response.getStatus());
         } catch (Exception e) {
-            return new ResponseEntity<>(new Response(500, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

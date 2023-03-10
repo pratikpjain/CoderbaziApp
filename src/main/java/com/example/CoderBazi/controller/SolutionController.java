@@ -33,9 +33,10 @@ public class SolutionController {
                                                 @RequestParam(value = "question-id") int questionId,
                                                 @RequestParam(value = "file") MultipartFile solutionFile) {
         try {
-            return new ResponseEntity<>(solutionService.AddSolution(userName, questionId, solutionFile), HttpStatus.CREATED);
+            Response response = solutionService.AddSolution(userName, questionId, solutionFile);
+            return new ResponseEntity<>(response, response.getStatus());
         } catch (Exception e) {
-            return new ResponseEntity<>(new Response(401, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -43,6 +44,9 @@ public class SolutionController {
     public ResponseEntity<Resource> GetSolution(@RequestParam(value = "question-id") int questionId) {
         try {
             Solution solution = solutionService.GetSolution(questionId);
+            if(solution == null) {
+                return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             String fileName = "solution_file_for_question/" + questionId + ".txt";
             ByteArrayInputStream byteArrayOutputStream;
             byteArrayOutputStream = new ByteArrayInputStream(solution.getSolutionFile());
@@ -52,7 +56,7 @@ public class SolutionController {
             headers.set(HttpHeaders.CONTENT_TYPE, ContentType.TEXT.getMimeType());
             return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

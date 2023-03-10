@@ -6,6 +6,7 @@ import com.example.CoderBazi.repositories.QuestionRepository;
 import com.example.CoderBazi.services.QuestionService;
 import com.j256.simplemagic.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,25 +23,37 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Response AddQuestion(String userName, MultipartFile file) throws IOException {
-        if(!ValidateFileType(file)) {
-            return new Response(401, "Please upload pdf file only. We do not support other extensions.", null);
+    public Response AddQuestion(String userName, MultipartFile file) {
+        try {
+            if (!ValidateFileType(file)) {
+                return new Response(HttpStatus.BAD_REQUEST, "Please upload pdf file only. We do not support other extensions.", null);
+            }
+            Question question = new Question();
+            question.setUserName(userName);
+            question.setFile(file.getBytes());
+            questionRepository.save(question);
+            return new Response(HttpStatus.CREATED, "Question added to the database successfully", null);
+        } catch (Exception e) {
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
         }
-        Question question = new Question();
-        question.setUserName(userName);
-        question.setFile(file.getBytes());
-        questionRepository.save(question);
-        return new Response(201, "Question added to the database successfully", null);
     }
     @Override
     public Question GetQuestion(int questionId) {
-        Question question = questionRepository.findById(questionId).get();
-        return question;
+        try {
+            Question question = questionRepository.findById(questionId).get();
+            return question;
+        } catch (Exception e) {
+            return null;
+        }
     }
     @Override
     public Response DeleteQuestion(int questionId) {
-        questionRepository.deleteAllByQuestionId(questionId);
-        return new Response(200, "Question is Deleted Successfully", null);
+        try {
+            questionRepository.deleteAllByQuestionId(questionId);
+            return new Response(HttpStatus.OK, "Question is Deleted Successfully", null);
+        } catch (Exception e) {
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
+        }
     }
     boolean ValidateFileType(MultipartFile file) {return file.getContentType().equals(ContentType.PDF.getMimeType());}
 

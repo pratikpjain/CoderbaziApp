@@ -26,15 +26,19 @@ public class QuestionController {
     public ResponseEntity<Response> AddQuestion(@RequestParam(value = "user-name") String userName,
                                                 @RequestParam(value = "file")MultipartFile file) {
         try {
-            return new ResponseEntity<>(questionService.AddQuestion(userName, file), HttpStatus.CREATED);
+            Response response = questionService.AddQuestion(userName, file);
+            return new ResponseEntity<>(response, response.getStatus());
         } catch (Exception e) {
-            return new ResponseEntity<>(new Response(401, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("getQuestion/")
     public ResponseEntity<Resource> GetQuestion(@RequestParam(value = "question-id") int questionId) {
         try {
             Question question = questionService.GetQuestion(questionId);
+            if(question == null) {
+                return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             String fileName = "problem/" + questionId + ".pdf";
             ByteArrayInputStream byteArrayOutputStream;
             byteArrayOutputStream = new ByteArrayInputStream(question.getFile());
@@ -44,11 +48,12 @@ public class QuestionController {
             headers.set(HttpHeaders.CONTENT_TYPE, ContentType.PDF.getMimeType());
             return new ResponseEntity<>(fileInputStream, headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @DeleteMapping("deleteQuestion/")
     public ResponseEntity<Response> DeleteQuestion(@RequestParam(value = "question-id") int questionId) {
-        return new ResponseEntity<>(questionService.DeleteQuestion(questionId), HttpStatus.OK);
+        Response response = questionService.DeleteQuestion(questionId);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }

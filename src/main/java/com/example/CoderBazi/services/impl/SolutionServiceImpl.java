@@ -7,6 +7,7 @@ import com.example.CoderBazi.services.SolutionService;
 import com.j256.simplemagic.ContentType;
 import org.hibernate.engine.transaction.jta.platform.internal.SunOneJtaPlatform;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,7 @@ public class SolutionServiceImpl implements SolutionService {
 
     public Response AddSolution(String userName, int questionId, MultipartFile solutionFile) throws IOException {
         if(!ValidateSolutionFileType(solutionFile)) {
-            return new Response(401, "We only support Text(.txt) files for solution file. Please upload only text files!", null);
+            return new Response(HttpStatus.BAD_REQUEST, "We only support Text(.txt) files for solution file. Please upload only text files!", null);
         }
         try {
             int testCaseId = solutionRepository.getTestCaseId(questionId);
@@ -34,9 +35,10 @@ public class SolutionServiceImpl implements SolutionService {
             solution.setUserName(userName);
             solutionRepository.save(solution);
             solutionRepository.verifyQuestion(questionId);
-            return new Response(201, "Solution Added Successfully. question_id:" + questionId + " testCaseId:" + testCaseId, null);
+            return new Response(HttpStatus.CREATED, "Solution Added Successfully. question_id:" + questionId + " testCaseId:" + testCaseId, null);
+
         } catch (Exception e) {
-            return new Response(401, e.getMessage(), null);
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
         }
     }
     @Override

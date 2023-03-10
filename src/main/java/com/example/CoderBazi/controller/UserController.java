@@ -19,16 +19,19 @@ public class UserController {
     }
     @PostMapping("addUser/")
     public ResponseEntity<Response> addUser(@RequestBody User user) {
-        return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
+        Response response = userService.addUser(user);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @GetMapping("getUsers/")
     public ResponseEntity<Response> getUsers() {
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+        Response response = userService.getUsers();
+        return new ResponseEntity<>(response, response.getStatus());
     }
 
     @DeleteMapping("deleteUser/")
     public ResponseEntity<Response> deleteUser(@RequestParam(value = "user_name") String user_name) {
-        return new ResponseEntity<>(userService.DeleteUser(user_name), HttpStatus.OK);
+        Response response = userService.DeleteUser(user_name);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }

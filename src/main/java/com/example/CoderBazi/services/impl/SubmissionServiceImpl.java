@@ -30,7 +30,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Override
     public Response AddSubmission(String userName, int questionId, MultipartFile submissionFile) throws IOException {
         if(!ValidateSubmissionFile(submissionFile)) {
-            return new Response(401, "We only support Text(.txt) files for solution file. Please upload only text files!", null);
+            return new Response(HttpStatus.BAD_REQUEST, "We only support Text(.txt) files for solution file. Please upload only text files!", null);
         }
         try {
             String verdict;
@@ -48,9 +48,9 @@ public class SubmissionServiceImpl implements SubmissionService {
             submissionRepository.save(submission);
             int submissionId = submissionRepository.getSubmissionIdByQuestionIdUserName(questionId, userName);
             SubmissionResponse submissionResponse = new SubmissionResponse(submissionId, questionId, userName, verdict, createAt, updateAt);
-            return new Response(HttpStatus.CREATED.value(), "Submission is Successful", submissionResponse);
+            return new Response(HttpStatus.CREATED, "Submission is Successful", submissionResponse);
         } catch (Exception e) {
-            return new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
         }
     }
 
@@ -69,9 +69,9 @@ public class SubmissionServiceImpl implements SubmissionService {
                 submissionResponse.setUpdatedAt(submission.getUpdatedAt());
                 submissionResponseList.add(submissionResponse);
             }
-            return new Response(HttpStatus.OK.value(), "Submissions Details", submissionResponseList);
+            return new Response(HttpStatus.OK, "Submissions Details", submissionResponseList);
         } catch (Exception e) {
-            return new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
         }
     }
 

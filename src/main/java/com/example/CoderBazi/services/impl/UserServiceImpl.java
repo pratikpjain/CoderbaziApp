@@ -7,6 +7,7 @@ import com.example.CoderBazi.repositories.UsersRepository;
 import com.example.CoderBazi.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,31 +25,43 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public Response addUser(User user) {
-        String ValidationResponse = ValidateUser(user.getName(), user.getUserName(), user.getPhoneNumber());
-        if(ValidationResponse != null) {
-            return new Response(401, ValidationResponse, null);
+        try {
+            String ValidationResponse = ValidateUser(user.getName(), user.getUserName(), user.getPhoneNumber());
+            if (ValidationResponse != null) {
+                return new Response(HttpStatus.BAD_REQUEST, ValidationResponse, null);
+            }
+            if (UserWithUserNameExists(user.getUserName())) {
+                return new Response(HttpStatus.BAD_REQUEST, "User with this user-name already exists! Please try another user-name.", null);
+            }
+            user.setCreatedAt(new Date());
+            user.setUpdatedAt(new Date());
+            usersRepository.save(user);
+            return new Response(HttpStatus.CREATED, "New User Created", user);
+        } catch (Exception e) {
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
         }
-        if(UserWithUserNameExists(user.getUserName())) {
-            return new Response(401, "User with this user-name already exists! Please try another user-name.", null);
-        }
-        user.setCreatedAt(new Date());
-        user.setUpdatedAt(new Date());
-        usersRepository.save(user);
-        return new Response(200, "New User Created", null);
     }
 
     @Override
     public Response getUsers() {
-        List<User> userList = usersRepository.getUsers();
-        int numberOfUsers = userList.size();
-        return new Response(200, "There are total " + numberOfUsers + " users in our database", userList);
+        try {
+            List<User> userList = usersRepository.getUsers();
+            int numberOfUsers = userList.size();
+            return new Response(HttpStatus.OK, "There are total " + numberOfUsers + " users in our database", userList);
+        } catch (Exception e) {
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), null);
+        }
     }
 
     @Override
     public Response DeleteUser(String userName) {
-        User deletedUser = usersRepository.getUserByUserName(userName);
-        usersRepository.deleteAllByUserName(userName);
-        return new Response(200, "Users Deleted successfully", deletedUser);
+        try {
+            User deletedUser = usersRepository.getUserByUserName(userName);
+            usersRepository.deleteAllByUserName(userName);
+            return new Response(HttpStatus.OK, "Users Deleted successfully", deletedUser);
+        } catch (Exception e) {
+            return new Response(HttpStatus.INTERNAL_SERVER_ERROR,  e.getMessage(), null);
+        }
     }
     String ValidateUser(String name, String userName, String phoneNumber) {
 
